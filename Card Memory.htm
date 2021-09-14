@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡牌記憶遊戲(點擊翻牌)</title>
+
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        body{
+            /* background-image: linear-gradient( 171.8deg,  rgba(5,111,146,1) 13.5%, rgba(6,57,84,1) 78.6% ); */
+            background-image: radial-gradient( circle farthest-corner at 50.3% 44.5%,  rgba(116,147,179,1) 0%, rgba(62,83,104,1) 100.2% );
+        }
+        .cardtao{
+            display: none;   
+        }
+        .container{
+            width: 100%;
+            max-width: 1450px;
+            margin: auto;
+            padding: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            display: none;
+        }
+        .box{
+            flex: auto;
+            width: 150px;
+            height: 240px;
+            /* max-width: 500px; */
+            margin: 5px;
+            position: relative;
+            /* background-color: red; */
+            perspective: 600px;
+        }
+        .cover, .back{
+            height: 100%;
+            width: 100%;
+            /* margin: 10px; */
+            /* background-color: blue; */
+            text-align: center;
+            font-size: 40px;
+            line-height: 300px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            cursor: pointer;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            box-shadow: 5px 5px 5px black;
+            transition: transform .6s;
+        }
+        .cover{
+            background-color: blue;
+            transform: rotateY(0deg);
+        }
+        .back{
+            background-color: yellow;
+            transform: rotateY(180deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .flipback{
+            transform: rotateY(180deg);
+        }
+        .flipcover{
+            transform: rotateY(360deg);
+        }
+        .scaledown{
+            transition: transform .8s;
+            transform: scale(0.02,0.02);
+        }
+        .disabevent{
+            pointer-events: none;
+        }
+        .fullscreen{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .descript{
+            width: 600px;
+            height: 480px;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            margin: auto;
+            background-color: #eeeeee;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        .maincont{
+            flex: none;
+            width: 90%;
+            height: 300px;
+            font-size: 60px;
+            text-align: center;
+            /* margin: auto; */
+            background-color: white;
+            border: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .endcont{
+          display: none;  
+        }
+
+        .start{
+            flex: none;
+            width: 90%;
+            height: 60px;
+            font-size: 36px;
+            background-color: white;
+            border: 1px solid black;
+            /* display: none; */
+        }
+        .restart, .over{
+            flex: auto;
+            width: 40%;
+            height: 60px;
+            margin: 0px 30px;
+            font-size: 36px;
+            background-color: white;
+            border: 1px solid black;
+            /* display: none; */
+        }
+        .start:hover, .restart:hover, .over:hover{
+            background-color: #dddddd;
+        }
+
+        .hide{
+            display: none;
+        }
+
+        .fade {
+            
+            animation: fade 1.2s linear ;
+        }
+
+        /*@-webkit-keyframes fade {
+            from {opacity: .4} 
+            to {opacity: 1}
+        }*/
+
+        @keyframes fade {
+            0% {opacity: .4} 
+            100% {opacity: 1}
+        }
+
+        ul{
+            display: none;
+        }
+
+        li{
+            width: 200px;
+            height: 300px;
+            border: 1px solid black;
+            /* text-align: center; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        img{
+            width: 95%;
+            height: 95%;
+        }
+    </style>
+
+</head>
+<body>
+    <h2 style="padding: 20px; color: white;">卡牌記憶遊戲</h2>
+      
+    <div id="cardtao" class="cardtao">
+        <img src="pic/boat-4899802_1920.jpg" alt="">
+        <img src="pic/canal-5488271_640.jpg" alt="">
+        <img src="pic/godafoss-1840758_1920.jpg" alt="">
+        <img src="pic/hut-1681485_1920.jpg" alt="">
+        <img src="pic/lake-irene-1679708_1920.jpg" alt="">
+        <img src="pic/mountain-landscape-2031539_1920.jpg" alt="">
+        <img src="pic/mountains-190055_1280.jpg" alt="">
+        <img src="pic/nature-3082832_1920.jpg" alt="">
+    </div>
+    <div id="container" class="container fade">
+
+        <div id="card1" class="box" >
+            <div id="cover" class="cover" onclick="flipback(0);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card2" class="box" >
+            <div id="cover" class="cover" onclick="flipback(1);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card3" class="box" >
+            <div id="cover" class="cover" onclick="flipback(2);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card4" class="box" >
+            <div id="cover" class="cover" onclick="flipback(3);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card5" class="box" > 
+            <div id="cover" class="cover" onclick="flipback(4);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card6" class="box" >
+            <div id="cover" class="cover" onclick="flipback(5);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card7" class="box" >
+            <div id="cover" class="cover" onclick="flipback(6);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card8" class="box" >
+            <div id="cover" class="cover" onclick="flipback(7);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card9" class="box" >
+            <div id="cover" class="cover" onclick="flipback(8);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card10" class="box" >
+            <div id="cover" class="cover" onclick="flipback(9);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card11" class="box" > 
+            <div id="cover" class="cover" onclick="flipback(10);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card12" class="box" >
+            <div id="cover" class="cover" onclick="flipback(11);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+        <div id="card13" class="box" >
+            <div id="cover" class="cover" onclick="flipback(12);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card14" class="box" >
+            <div id="cover" class="cover" onclick="flipback(13);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card15" class="box" > 
+            <div id="cover" class="cover" onclick="flipback(14);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+
+        <div id="card16" class="box" >
+            <div id="cover" class="cover" onclick="flipback(15);">cover</div>
+            <div id="back" class="back" ><img src="" alt=""></div>
+        </div>
+        
+    
+    </div>
+    <div id="fullscreen" class="fullscreen">
+        <div id="descript" class="descript">
+            <div id="maincont" class="maincont">歡迎來玩<br>請按開始遊戲</div>
+            <div id="endcont" class="endcont">你贏了爽不爽</div>
+            <input type="button" value="開始遊戲" id="start" class="start " onclick="gamestart();">
+            <input type="button" value="再來一局" id="restart" class="restart hide" onclick="restart();">
+            <input type="button" value="結束" id="over" class="over hide" onclick="backtohome();">
+        </div>
+    </div> 
+    <script src="index.js"></script>
+</body>
+</html>
